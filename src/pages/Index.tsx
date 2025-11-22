@@ -216,7 +216,7 @@ const Index = () => {
           </div>
           <div className="rounded-2xl overflow-hidden shadow-xl animate-fade-in">
             <img 
-              src="https://cdn.poehali.dev/projects/6fc40eb8-6fa7-4738-acc1-14a57d0d49d6/files/4f695ca6-e2fa-4ed1-904d-cf2bbde90ce3.jpg" 
+              src="https://cdn.poehali.dev/projects/6fc40eb8-6fa7-4738-acc1-14a57d0d49d6/files/dd3c5846-4bff-42f9-87a7-931c0d82a209.jpg" 
               alt="Наша продукция"
               className="w-full h-96 object-cover"
             />
