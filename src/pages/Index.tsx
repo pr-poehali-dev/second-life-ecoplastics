@@ -56,23 +56,54 @@ const Index = () => {
 
   const products = [
     {
-      name: 'Бутылки 0.2-0.5л',
-      description: 'Компактные бутылки для воды и напитков',
+      name: 'Бутылка 0.2л',
+      description: 'Компактная бутылка для воды',
+      price: '2 ₽',
+      durablePrice: '+100 ₽ за долговечный материал',
       icon: 'Droplet'
     },
     {
-      name: 'Бутылки 1-2л',
-      description: 'Стандартные бутылки для ежедневного использования',
+      name: 'Бутылка 0.3л',
+      description: 'Удобная бутылка для напитков',
+      price: '3 ₽',
+      durablePrice: '+100 ₽ за долговечный материал',
+      icon: 'Droplet'
+    },
+    {
+      name: 'Бутылка 0.4л',
+      description: 'Стандартная бутылка',
+      price: '4 ₽',
+      durablePrice: '+100 ₽ за долговечный материал',
       icon: 'Container'
     },
     {
-      name: 'ZIP-пакеты XS-M',
-      description: 'Малые пакеты для хранения продуктов',
+      name: 'ZIP-пакет XS',
+      description: 'Малый пакет для хранения',
+      price: '200 ₽',
       icon: 'Package'
     },
     {
-      name: 'ZIP-пакеты L-XL',
-      description: 'Большие пакеты для длительного хранения',
+      name: 'ZIP-пакет S',
+      description: 'Небольшой пакет для продуктов',
+      price: '300 ₽',
+      icon: 'Package'
+    },
+    {
+      name: 'ZIP-пакет M',
+      description: 'Средний пакет для хранения',
+      price: '400 ₽',
+      icon: 'PackageOpen'
+    },
+    {
+      name: 'ZIP-пакет L',
+      description: 'Большой пакет для продуктов',
+      price: '500 ₽',
+      icon: 'PackageOpen'
+    },
+    {
+      name: 'ZIP-пакет XL',
+      description: 'Очень большой пакет',
+      price: '600 ₽',
       icon: 'PackageOpen'
     }
   ];
@@ -209,7 +240,13 @@ const Index = () => {
                     <Icon name={product.icon} className="text-primary" size={36} />
                   </div>
                   <h3 className="text-lg font-semibold mb-2 font-montserrat">{product.name}</h3>
-                  <p className="text-sm text-gray-600 font-inter">{product.description}</p>
+                  <p className="text-sm text-gray-600 mb-3 font-inter">{product.description}</p>
+                  <div className="border-t pt-3">
+                    <p className="text-2xl font-bold text-primary font-montserrat">{product.price}</p>
+                    {product.durablePrice && (
+                      <p className="text-xs text-gray-500 mt-1 font-inter">{product.durablePrice}</p>
+                    )}
+                  </div>
                 </CardContent>
               </Card>
             ))}
