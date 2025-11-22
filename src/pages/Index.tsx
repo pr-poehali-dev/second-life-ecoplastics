@@ -1,11 +1,19 @@
 import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
+import { useToast } from '@/hooks/use-toast';
 import Icon from '@/components/ui/icon';
 
 const Index = () => {
   const [carbonFootprint, setCarbonFootprint] = useState(1247);
   const [activeSection, setActiveSection] = useState('home');
+  const [isOrderDialogOpen, setIsOrderDialogOpen] = useState(false);
+  const [isPartnerDialogOpen, setIsPartnerDialogOpen] = useState(false);
+  const { toast } = useToast();
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -18,6 +26,32 @@ const Index = () => {
     setActiveSection(sectionId);
     const element = document.getElementById(sectionId);
     element?.scrollIntoView({ behavior: 'smooth' });
+  };
+
+  const handleOrderSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const formData = new FormData(e.currentTarget);
+    const data = Object.fromEntries(formData);
+    console.log('Заявка на покупку:', data);
+    toast({
+      title: 'Заявка отправлена!',
+      description: 'Мы свяжемся с вами в ближайшее время',
+    });
+    setIsOrderDialogOpen(false);
+    e.currentTarget.reset();
+  };
+
+  const handlePartnerSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const formData = new FormData(e.currentTarget);
+    const data = Object.fromEntries(formData);
+    console.log('Заявка на партнёрство:', data);
+    toast({
+      title: 'Заявка принята!',
+      description: 'Наш менеджер свяжется с вами для обсуждения сотрудничества',
+    });
+    setIsPartnerDialogOpen(false);
+    e.currentTarget.reset();
   };
 
   const products = [
@@ -82,10 +116,45 @@ const Index = () => {
               <p className="text-xl text-gray-600 mb-8 font-inter">
                 Замкнутый цикл. Нулевые отходы. Чистая планета.
               </p>
-              <Button onClick={() => scrollToSection('how-it-works')} size="lg" className="bg-primary hover:bg-primary/90 text-white font-medium">
-                Узнать больше
-                <Icon name="ArrowRight" className="ml-2" size={20} />
-              </Button>
+              <div className="flex gap-4">
+                <Button onClick={() => scrollToSection('how-it-works')} size="lg" className="bg-primary hover:bg-primary/90 text-white font-medium">
+                  Узнать больше
+                  <Icon name="ArrowRight" className="ml-2" size={20} />
+                </Button>
+                <Dialog open={isOrderDialogOpen} onOpenChange={setIsOrderDialogOpen}>
+                  <DialogTrigger asChild>
+                    <Button size="lg" variant="outline" className="border-2 border-primary text-primary hover:bg-primary/5">
+                      Купить продукцию
+                    </Button>
+                  </DialogTrigger>
+                  <DialogContent className="sm:max-w-md">
+                    <DialogHeader>
+                      <DialogTitle className="font-montserrat">Заявка на покупку</DialogTitle>
+                    </DialogHeader>
+                    <form onSubmit={handleOrderSubmit} className="space-y-4">
+                      <div>
+                        <Label htmlFor="order-name">Имя</Label>
+                        <Input id="order-name" name="name" placeholder="Иван Иванов" required />
+                      </div>
+                      <div>
+                        <Label htmlFor="order-phone">Телефон</Label>
+                        <Input id="order-phone" name="phone" type="tel" placeholder="+7 (999) 123-45-67" required />
+                      </div>
+                      <div>
+                        <Label htmlFor="order-email">Email</Label>
+                        <Input id="order-email" name="email" type="email" placeholder="example@mail.ru" required />
+                      </div>
+                      <div>
+                        <Label htmlFor="order-product">Интересующая продукция</Label>
+                        <Textarea id="order-product" name="product" placeholder="Бутылки 1-2л, ZIP-пакеты..." rows={3} />
+                      </div>
+                      <Button type="submit" className="w-full bg-primary hover:bg-primary/90">
+                        Отправить заявку
+                      </Button>
+                    </form>
+                  </DialogContent>
+                </Dialog>
+              </div>
             </div>
             <div className="animate-scale-in">
               <img 
@@ -211,10 +280,50 @@ const Index = () => {
                   </li>
                 ))}
               </ul>
-              <Button size="lg" className="bg-gray-900 hover:bg-gray-800 text-white">
-                Стать партнёром
-                <Icon name="Handshake" className="ml-2" size={20} />
-              </Button>
+              <Dialog open={isPartnerDialogOpen} onOpenChange={setIsPartnerDialogOpen}>
+                <DialogTrigger asChild>
+                  <Button size="lg" className="bg-gray-900 hover:bg-gray-800 text-white">
+                    Стать партнёром
+                    <Icon name="Handshake" className="ml-2" size={20} />
+                  </Button>
+                </DialogTrigger>
+                <DialogContent className="sm:max-w-lg">
+                  <DialogHeader>
+                    <DialogTitle className="font-montserrat">Заявка на партнёрство</DialogTitle>
+                  </DialogHeader>
+                  <form onSubmit={handlePartnerSubmit} className="space-y-4">
+                    <div>
+                      <Label htmlFor="partner-company">Название компании</Label>
+                      <Input id="partner-company" name="company" placeholder="ООО 'Название'" required />
+                    </div>
+                    <div>
+                      <Label htmlFor="partner-name">Контактное лицо</Label>
+                      <Input id="partner-name" name="name" placeholder="Иван Иванов" required />
+                    </div>
+                    <div className="grid grid-cols-2 gap-4">
+                      <div>
+                        <Label htmlFor="partner-phone">Телефон</Label>
+                        <Input id="partner-phone" name="phone" type="tel" placeholder="+7 (999) 123-45-67" required />
+                      </div>
+                      <div>
+                        <Label htmlFor="partner-email">Email</Label>
+                        <Input id="partner-email" name="email" type="email" placeholder="example@mail.ru" required />
+                      </div>
+                    </div>
+                    <div>
+                      <Label htmlFor="partner-volume">Планируемый объём закупок</Label>
+                      <Input id="partner-volume" name="volume" placeholder="1000 шт/месяц" />
+                    </div>
+                    <div>
+                      <Label htmlFor="partner-message">Комментарий</Label>
+                      <Textarea id="partner-message" name="message" placeholder="Расскажите о вашем бизнесе и планах сотрудничества" rows={3} />
+                    </div>
+                    <Button type="submit" className="w-full bg-gray-900 hover:bg-gray-800">
+                      Отправить заявку
+                    </Button>
+                  </form>
+                </DialogContent>
+              </Dialog>
             </div>
             <Card className="border-none shadow-2xl animate-scale-in">
               <CardContent className="p-8">
